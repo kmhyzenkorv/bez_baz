@@ -1,22 +1,62 @@
-html, body {
+
+body {
     height: 100%;
     margin: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: darkslateblue;
-    font-family: 'Roboto', sans-serif; 
+    background-color: rgb(61, 8, 17);
+    font-family: 'Roboto', sans-serif;
+    overflow: hidden;
+    margin-top: 340px;
+}
+
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+    grid-template-rows: repeat(auto-fill, minmax(50px, 1fr));
+    gap: 2px;
+}
+
+.square {
+    background-color: rgba(0, 0, 0, 0.2);
+    animation: squareAnimation 5s infinite ease-in-out;
+}
+
+@keyframes squareAnimation {
+    0% {
+        background-color: rgba(0, 0, 0, 0.2);
+        transform: scale(1);
+    }
+    50% {
+        background-color: rgba(0, 0, 0, 0.6);
+        transform: scale(0.9);
+    }
+    100% {
+        background-color: rgba(0, 0, 0, 0.2);
+        transform: scale(1);
+    }
 }
 
 .container {
-    border: 4px solid black;
-    background-color: rgb(161, 223, 223);
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    border: 20px solid rgba(0,0,0,0.0);
+    border-radius: 15px;
     display: flex;
     flex-direction: column;
-    justify-content: center; 
-    align-items: center; 
+    justify-content: center;
+    align-items: center;
+    width: 500px;
     margin-top: 0;
     padding: 20px;
+    z-index: 1;
 }
 
 .input {
@@ -25,9 +65,21 @@ html, body {
     padding: 10px;
     width: 200px;
     text-align: center;
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 .button {
     height: 40px;
-    width: 70px;
+    width: 100px;
+    background-color: rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+    border: white;
+    transition: 0.3s;
+    border-radius: 10px;
 }
+
+button:hover {
+    color: green;
+}
+
+
