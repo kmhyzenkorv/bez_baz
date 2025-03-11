@@ -7,10 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
         submitButton.addEventListener('click', function() {
             var username = usernameInput.value;
             var password = passwordInput.value;
-            
-            checkuser(username, password);
 
-            nedoauthorized(usernameInput, passwordInput);
+            checkuser(username, password);
+            authenticateUser(username, password);
         });
     }
 });
@@ -27,17 +26,29 @@ for (let i = 0; i < squaresCount; i++) {
 function checkuser(usernameValue, passwordValue) {
     if (usernameValue.length === 0 || passwordValue.length === 0) {
         console.log("тупее чем рыжий кот");
-    }
-    else console.log("умнее чем рыжий кот");
-};
-
-function nedoauthorized(usernameInput, passwordInput) {
-    let auth_login = ["admin", "user", "guest", "moderator", "admin", "superadmin", "root", "dev"]
-    let auth_password = ["admin", "user", "guest", "moderator", "admin", "superadmin", "root", "dev"]
-    var user = usernameInput.value;
-    var pass = passwordInput.value;
-    if (auth_login.includes(user) && auth_password.includes(pass)) {
-        console.log("Успешно авторизованы");
     } else {
-        console.log("Неправильный логин или пароль");
-    }}
+        console.log("умнее чем рыжий кот");
+    }
+}
+
+function authenticateUser(username, password) {
+    fetch('http://localhost:3000/auth', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        }
+        throw new Error('Неправильный логин или пароль');
+    })
+    .then(data => {
+        console.log(data.message);
+    })
+    .catch(error => {
+        console.error(error.message);
+    });
+}
