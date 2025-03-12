@@ -1,12 +1,10 @@
 import express from 'express';
-import path from 'path';
 import session from 'express-session';
 import crypto from 'crypto';
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
-
 
 app.use(express.static("public"));
 
