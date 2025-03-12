@@ -44,6 +44,18 @@ app.get("/protected", (req, res) => {
     res.sendFile("protected.html", options);
 });
 
+
+app.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Ошибка при выходе из системы" });
+        }
+        console.log("Logged Out: false");
+        return res.sendFile("index.html", options);
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);
 });
