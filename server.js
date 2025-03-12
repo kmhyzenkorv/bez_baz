@@ -51,7 +51,7 @@ app.post('/logout', (req, res) => {
             console.error(err);
             return res.status(500).json({ message: "Ошибка при выходе из системы" });
         }
-        console.log("Logged Out: false");
+        console.log("Logged Out: true");
         return res.sendFile("index.html", options);
     });
 });
