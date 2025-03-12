@@ -37,8 +37,11 @@ app.post('/auth', (req, res) => {
     }
 });
 
-app.get('/protected', (req, res) => {
-    res.sendFile('protected.html', options);
+app.get("/protected", (req, res) => {
+    if (!req.session.loggedIn) {
+        return res.status(402).json({ message: "Неавторизованный доступ" });
+    }
+    res.sendFile("protected.html", options);
 });
 
 app.listen(PORT, () => {

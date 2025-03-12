@@ -37,15 +37,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-const background = document.querySelector('.background');
-const squaresCount = 644;
-
-for (let i = 0; i < squaresCount; i++) {
-    const square = document.createElement('div');
-    square.classList.add('square');
-    background.appendChild(square);
-}
-
 function checkuser(usernameValue, passwordValue) {
     if (usernameValue.length === 0 || passwordValue.length === 0) {
         console.log("тупее чем рыжий кот");
