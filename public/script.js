@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
+    const authForm = document.getElementById('authForm'); // Обработчик события формы
+
+    if (authForm) {
+        authForm.addEventListener('submit', function(event) {
+            event.preventDefault();});
+        }
+});
+document.addEventListener('DOMContentLoaded', function() {
     const submitButton = document.getElementById('submitButton');
     const usernameInput = document.getElementById('username');
     const passwordInput = document.getElementById('password');
@@ -41,9 +49,10 @@ function authenticateUser(username, password) {
     })
     .then(response => {
         if (response.ok) {
-            return response.json();
+            window.location.href = '/protected';
+        } else {
+            throw new Error('Неправильный логин или пароль');
         }
-        throw new Error('Неправильный логин или пароль');
     })
     .then(data => {
         console.log(data.message);
