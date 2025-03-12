@@ -24,26 +24,6 @@ body {
     gap: 2px;
 }
 
-.square {
-    background-color: rgba(0, 0, 0, 0.2);
-    animation: squareAnimation 5s infinite ease-in-out;
-}
-
-@keyframes squareAnimation {
-    0% {
-        background-color: rgba(0, 0, 0, 0.2);
-        transform: scale(1);
-    }
-    50% {
-        background-color: rgba(0, 0, 0, 0.6);
-        transform: scale(0.9);
-    }
-    100% {
-        background-color: rgba(0, 0, 0, 0.2);
-        transform: scale(1);
-    }
-}
-
 .container {
     background-color: rgba(255, 255, 255, 0.3);
     backdrop-filter: blur(10px);
@@ -82,3 +62,7 @@ button:hover {
     color: green;
 }
 
+.text{
+    height: 500px;
+    color: aliceblue;
+}
