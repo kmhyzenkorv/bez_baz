@@ -5,7 +5,7 @@ const app = express();
 const PORT = 3000;
 
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
 app.use(session({
@@ -14,17 +14,19 @@ app.use(session({
     cookie: { httpOnly: true }
 }));
 
+const options = {root: "public" };
+
 app.get('/', (req, res) => {
-    res.sendFile(path.join('public', 'index.html'));
+    res.sendFile( 'index.html', options);
 });
 
 app.post('/auth', (req, res) => {
-    const { username, password } = req.body;
-
+    const { login, password } = req.body;
+    console.log(login, password);
     const authLogin = ["admin"];
     const authPassword = ["admin"];
 
-    if (authLogin.includes(username) && authPassword.includes(password)) {
+    if (authLogin.includes(login) && authPassword.includes(password)) {
         req.session.loggedIn = true;
         req.session.uid = crypto.randomBytes(48).toString('hex');
         console.log(`UID: ${req.session.uid}`);
@@ -36,11 +38,7 @@ app.post('/auth', (req, res) => {
 });
 
 app.get('/protected', (req, res) => {
-    if (req.session.loggedIn === true) {
-        res.status(200).json({ message: "Доступ разрешен" });
-    } else {
-        res.redirect('/');
-    }
+    res.sendFile('protected.html', options);
 });
 
 app.listen(PORT, () => {

@@ -1,11 +1,26 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const authForm = document.getElementById('authForm'); // Обработчик события формы
+const login = document.getElementById("login").value.trim();
+const password = document.getElementById("password").value.trim();
+   document.addEventListener("DOMContentLoaded", function () {
 
-    if (authForm) {
-        authForm.addEventListener('submit', function(event) {
-            event.preventDefault();});
-        }
-});
+
+        const form = document.querySelector(".form");
+    
+        form.addEventListener("submit", function (event) {
+
+            
+            console.log(`Login: ${login}, Password: ${password}`);
+            if (!login) {
+                event.preventDefault(); 
+                return;
+            }
+            if (!password) {
+                event.preventDefault();
+                return;
+            }
+    
+        });
+    });
+    
 document.addEventListener('DOMContentLoaded', function() {
     const submitButton = document.getElementById('submitButton');
     const usernameInput = document.getElementById('username');
@@ -37,27 +52,4 @@ function checkuser(usernameValue, passwordValue) {
     } else {
         console.log("умнее чем рыжий кот");
     }
-}
-
-function authenticateUser(username, password) {
-    fetch('http://localhost:3000/auth', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-    })
-    .then(response => {
-        if (response.ok) {
-            window.location.href = '/protected';
-        } else {
-            throw new Error('Неправильный логин или пароль');
-        }
-    })
-    .then(data => {
-        console.log(data.message);
-    })
-    .catch(error => {
-        console.error(error.message);
-    });
 }
