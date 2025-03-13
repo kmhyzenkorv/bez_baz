@@ -33,7 +33,7 @@ app.post('/auth', (req, res) => {
         console.log(`Logged In: ${req.session.loggedIn}`);
         return res.redirect('/protected');
     } else {
-        return res.status(401).json({ message: "Неправильный логин или пароль" });
+        return res.status(401).sendFile("error.html", options);
     }
 });
 
@@ -55,6 +55,13 @@ app.post('/logout', (req, res) => {
         return res.sendFile("index.html", options);
     });
 });
+
+app.get("/error", (req, res) => {
+    if (!req.session.loggedIn) {
+    res.sendFile("error.html", options);}
+});
+
+
 
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);

@@ -8,7 +8,7 @@ body {
     background-color: rgb(61, 8, 17);
     font-family: 'Roboto', sans-serif;
     overflow: hidden;
-    margin-top: 340px;
+    
 }
 
 .background {
@@ -34,9 +34,10 @@ body {
     justify-content: center;
     align-items: center;
     width: 500px;
-    margin-top: 0;
+    margin-top: 300px;
     padding: 20px;
     z-index: 1;
+    height: 200px;
 }
 
 .input {
@@ -56,6 +57,7 @@ body {
     border: white;
     transition: 0.3s;
     border-radius: 10px;
+    justify-content: center;
 }
 
 button:hover {
