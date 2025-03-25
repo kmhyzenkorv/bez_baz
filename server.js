@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
+
 const app = express();
 const PORT = 80;
 const secret = "secret";
@@ -42,7 +43,7 @@ app.get("/protected", (req, res) => {
             if (err) {
                 return res.status(403).json({ message: "Токен недействителен" });
             }
-            const data = decodedToken;
+            //const data = decodedToken;
             const role = decodedToken.role;
             console.log(role);
             if (role === "admin"){
