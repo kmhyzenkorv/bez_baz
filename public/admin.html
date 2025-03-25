@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Protected</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti/dist/confetti.browser.min.js"></script>
+</head>
+
+<body>
+<h1 class="container">Авторизация успешна! Вы, админ
+<div class="text">Хочешь выйти? Пожалуйста!</div>
+<form action="/logout" method="post" class="">
+<button class="button" name="logout">Выйти</button>
+</h1>
+</form>
+<div class="items"><a href = "https://github.com/kmhyzenkorv/RKTools">бесполезная дичь для установки всякого</a></div>
+</body>
+
+<script>
+    function shootConfetti() {
+        var duration = 2 * 200;
+        var end = Date.now() + duration;
+
+        (function frame() {
+            confetti({
+                startVelocity: 30,
+                spread: 360,
+                ticks: 60,
+                gravity: 1,
+                origin: {
+                    x: Math.random(),
+                    y: Math.random() - 0.2
+                }
+            });
+
+            if (Date.now() < end) {
+                requestAnimationFrame(frame);
+            }
+        })();
+    }
+
+    window.onload = function() {
+        shootConfetti();
+    };
+</script>

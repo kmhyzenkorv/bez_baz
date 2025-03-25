@@ -42,9 +42,18 @@ app.get("/protected", (req, res) => {
             if (err) {
                 return res.status(403).json({ message: "Токен недействителен" });
             }
-            const {role} = decodedToken;
-            res.send(`<h1>Привет, ${role}.</h1>`);
-            //res.sendFile("protected.html", options);
+            const data = decodedToken;
+            const role = decodedToken.role;
+            console.log(role);
+            if (role === "admin"){
+                res.sendFile("admin.html", options);
+            }
+            else if (role === "staff"){
+                res.sendFile("staff.html", options);
+            }
+            else{
+                res.sendFile("user.html", options);
+            }
         });
     } else {
         return res.status(401).sendFile("error.html", options);
@@ -54,13 +63,13 @@ app.get("/protected", (req, res) => {
 app.get("/telegram", (req, res) => {
     const tg_data = req.query
     console.log(tg_data);
-    res.status(200).send("Отправлено в Телеграм!");
+    res.status(200).send("Успешно!");
 });
 
-//app.post('/logout', (req, res) => {
- //   res.clearCookie('token');
-  //  return res.redirect('/');
-//});
+app.post('/logout', (req, res) => {
+    res.clearCookie('token');
+    return res.redirect('/');
+});
 
 
 app.listen(PORT, () => {
