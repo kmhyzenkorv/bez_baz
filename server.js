@@ -16,7 +16,7 @@ const userData = [
     { role: 'admin', login: 'admin', password: 'admin' },
     { role: 'staff', login: 'staff', password: 'staff' },
     { role: 'user', login: 'user', password: 'user' }
-];  
+];
 const options = {root: "pages" };
 
 app.get('/', (req, res) => {
