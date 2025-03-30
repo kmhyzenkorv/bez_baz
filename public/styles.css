@@ -57,6 +57,7 @@ body {
     border: white;
     transition: 0.3s;
     border-radius: 10px;
+    margin-bottom: 10px;
     justify-content: center;
 }
 
