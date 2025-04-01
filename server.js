@@ -1,6 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
+import crypto from 'crypto'
 
 const app = express();
 const PORT = 80;
@@ -62,9 +63,31 @@ app.get("/protected", (req, res) => {
 });
 
 app.get("/telegram", (req, res) => {
-    const tg_data = req.query
-    console.log(tg_data);
-    res.status(200).send("Успешно!");
+    const userData = req.query
+    const keys = Object.keys(userData).sort();
+    const rows = keys
+    .map(key=>{
+        if (key !== 'hash'){
+            return `${key}=${userData[key]}`;
+        }
+        return null
+    })
+    .filter((i) => i !== null);
+    const rawData = rows.join("\n");
+    console.log(rawData);
+    const hashSecret = crypto
+    .createHash('SHA256')
+    .update('7773555430:AAE4zsaCBgy7omL5WpSb4zeDQmntRntZUpk')
+    .digest();
+    const hash = crypto
+    .createHmac('sha256', hashSecret)
+    .update(rawData)
+    .digest('hex');
+    console.log(hash);
+    if (hash !== userData.hash) {
+    res.status(403).json({message: "Invalid hash"});
+}
+    res.send("Успешно!").status(403);
 });
 
 app.post('/logout', (req, res) => {
