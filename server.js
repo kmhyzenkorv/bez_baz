@@ -92,7 +92,7 @@ app.get("/telegram", (req, res) => {
     console.log(rawData);
     const hashSecret = crypto
     .createHash('SHA256')
-    .update('7773555430:AAE4zsaCBgy7omL5WpSb4zeDQmntRntZUpk')
+    .update('') 
     .digest();
     const hash = crypto
     .createHmac('sha256', hashSecret)
