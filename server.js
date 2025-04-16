@@ -1,7 +1,8 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
-import crypto from 'crypto'
+//import bcrypt from 'bcrypt';
+import pool from './db.js';
 
 const app = express();
 const PORT = 80;
@@ -13,27 +14,41 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-const userData = [
-    { role: 'admin', login: 'admin', password: 'admin' },
-    { role: 'staff', login: 'staff', password: 'staff' },
-    { role: 'user', login: 'user', password: 'user' }
-];
+//const userData = [
+ //   { role: 'admin', login: 'admin', password: 'admin' },
+ //   { role: 'staff', login: 'staff', password: 'staff' },
+ //   { role: 'user', login: 'user', password: 'user' }
+//];
 const options = {root: "pages" };
 
 app.get('/', (req, res) => {
     res.sendFile( 'index.html', options);
 });
 
-app.post('/auth', (req, res) => {
+app.post('/auth', async (req, res) => {
     const { login, password } = req.body;
-    const user = userData.find(u => u.login === login && u.password === password);
-    if (user) {
-        const token = jwt.sign({ role: user.role, login: user.login }, secret, { expiresIn: '1h' })
-        res.cookie('token', token), {httpOnly: true}
+
+    try {
+        const result = await pool.query('SELECT * FROM Users WHERE name = $1', [login]);
+        const user = result.rows[0];
+
+        if (!user) {
+            return res.status(401).sendFile("error.html", options);
+        }
+        //const passwordMatch = await bcrypt.compare(password, user.password);
+        //if (passwordMatch) {
+       if (password === user.password) {
+        const token = jwt.sign({ role: user.role, login: user.name }, secret, { expiresIn: '1h' });
+        res.cookie('token', token, { httpOnly: true });
         console.log(token);
-        return res.redirect('/protected');
-    } else {
-        return res.status(401).sendFile("error.html", options);
+
+            return res.redirect('/protected');
+        } else {
+            return res.status(401).sendFile("error.html", options);
+        }
+    } catch (error) {
+        console.error("Ошибка аутентификации:", error);
+        return res.status(500).json({ message: "Ошибка сервера" });
     }
 });
 
@@ -98,4 +113,4 @@ app.post('/logout', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);
-});
+}); 
