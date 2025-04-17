@@ -107,9 +107,20 @@ app.get("/telegram", (req, res) => {
 
 app.post('/logout', (req, res) => {
     res.clearCookie('token');
-    return res.redirect('/');
+    return res.redirect('/'); 
 });
 
+
+app.get('/feed', async (req, res) => {
+    try {
+      const feed = await pool.query('SELECT title, body FROM feedback');
+      res.json(feed.rows);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Ошибка при получении отзывов' });
+    }
+  });
+  
 
 app.listen(PORT, () => {
     console.log(`Сервер запущен на http://localhost:${PORT}`);
