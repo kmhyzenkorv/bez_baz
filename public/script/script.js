@@ -44,3 +44,7 @@ function checkuser(usernameValue, passwordValue) {
         console.log("умнее чем рыжий кот");
     }
 }
+
+function redirect(){
+    window.location.href = "http://site.ru/reg"
+}

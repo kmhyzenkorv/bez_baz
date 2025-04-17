@@ -9,18 +9,16 @@
 <body>
 
     <div class="container">
-        <h1>Авторизация</h1>
-        <form action="/auth" method="post" class="form">
-        <input name="login" class="input" id="username" placeholder="Логин">
-        <input  name="password" class="input" type="password" id="password" placeholder="Пароль"> 
-        <button class="button" id="submitButton">Войти</button>
-        <!-- <button class="button" id="regbutton">Регистрация</button> -->
+        <h1>Регистрация</h1>
+        <form action="/reg" method="post" class="form">
+        <input name="user" class="input" id="username" placeholder="Логин">
+        <input  name="password" class="input" type="password" id="password" placeholder="Пароль">
+        <button class="button" id="regbutton">Регистрация</button>
         <div><script async src="https://telegram.org/js/telegram-widget.js?22" data-telegram-login="authkh_bot" data-size="large" data-auth-url="/telegram" data-request-access="write"></script></div>
 
     </div>
-    
 </form>
-<button onclick="redirect()" class="button">Регистрация</button>
+
 <form action="/feed" method="GET" class="container">
     <button type="submit" class="button">Получить отзывы</button>
   </form>

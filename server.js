@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
-//import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import pool from './db.js';
 
 const app = express();
@@ -25,6 +25,24 @@ app.get('/', (req, res) => {
     res.sendFile( 'index.html', options);
 });
 
+app.get('/reg', (req,res)=>{
+    res.sendFile('reg.html', options);
+});
+
+app.post('/reg', async (req,res)=>{
+    const {user, password} = req.body
+
+    const hashedpass = await bcrypt.hash(password, 10);
+
+    const token = jwt.sign({ role: "user", login: user }, secret, { expiresIn: '1h' });
+    res.cookie('token', token, { httpOnly: true });
+    console.log(token);
+
+    const result = await pool.query("INSERT INTO users (name, password, role) VALUES ($1, $2, $3)", [user, hashedpass, "user"]);
+
+    return res.redirect('/protected');
+});
+
 app.post('/auth', async (req, res) => {
     const { login, password } = req.body;
 
@@ -35,9 +53,9 @@ app.post('/auth', async (req, res) => {
         if (!user) {
             return res.status(401).sendFile("error.html", options);
         }
-        //const passwordMatch = await bcrypt.compare(password, user.password);
-        //if (passwordMatch) {
-       if (password === user.password) {
+        const passwordMatch = await bcrypt.compare(password, user.password);
+        if (passwordMatch) {
+       //if (password === user.password) {
         const token = jwt.sign({ role: user.role, login: user.name }, secret, { expiresIn: '1h' });
         res.cookie('token', token, { httpOnly: true });
         console.log(token);
