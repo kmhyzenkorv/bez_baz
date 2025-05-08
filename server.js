@@ -7,8 +7,8 @@ import pool from './db.js';
 
 const app = express();
 const PORT = 80;
-const secret = "secret";
-
+const BOT_TOKEN = '7773555430:AAE4zsaCBgy7omL5WpSb4zeDQmntRntZUpk'
+const secret = crypto.createHash('sha256').update(BOT_TOKEN).digest();
 
 app.use(express.json());
 app.use(cookieParser());
@@ -73,9 +73,12 @@ app.post('/auth', async (req, res) => {
 
 app.get("/protected", (req, res) => {
     const token = req.cookies.token;
+    console.log(token);
+    
     if (token) {
         jwt.verify(token, secret, (err, decodedToken) => {
             if (err) {
+                console.log(err);
                 return res.status(403).json({ message: "Токен недействителен" });
             }
             //const data = decodedToken;
@@ -96,33 +99,51 @@ app.get("/protected", (req, res) => {
 }
 });
 
-app.get("/telegram", (req, res) => {
-    const userData = req.query
-    const keys = Object.keys(userData).sort();
-    const rows = keys
-    .map(key=>{
-        if (key !== 'hash'){
-            return `${key}=${userData[key]}`;
-        }
-        return null
-    })
-    .filter((i) => i !== null);
-    const rawData = rows.join("\n");
-    console.log(rawData);
-    const hashSecret = crypto
-    .createHash('SHA256')
-    .update('') 
-    .digest();
-    const hash = crypto
-    .createHmac('sha256', hashSecret)
-    .update(rawData)
-    .digest('hex');
-    console.log(hash);
-    if (hash !== userData.hash) {
-    res.status(403).json({message: "Invalid hash"});
-}
-    res.send("Успешно!").status(403);
-});
+app.get("/telegram", async (req, res) => {
+    const userData = req.query;
+    const name = userData.first_name
+    const keys = Object.keys(userData).filter(k => k !== 'hash').sort();
+    const dataCheckString = keys.map(key => `${key}=${userData[key]}`).join('\n');
+  
+    const hmac = crypto.createHmac('sha256', secret)
+      .update(dataCheckString)
+      .digest('hex');
+  
+    if (hmac !== userData.hash) {
+      return res.status(403).json({message: "Invalid hash"});
+    }
+  
+    const telegramId = userData.id;
+  
+    const client = await pool.connect();
+    try {
+      const existing = await client.query('SELECT * FROM users WHERE telega_id = $1', [telegramId]);
+      if (existing.rowCount === 0) {
+        await client.query(
+          'INSERT INTO users (name, password, role, telega_id) VALUES (\$1, \$2, \$3, \$4)',
+          [name, '', "user", telegramId]
+        );
+      }
+      console.log('0')
+    const token = jwt.sign(
+        {role: "user", login: telegramId},
+        secret,
+        { expiresIn: '1h' }
+    );
+    console.log(token);
+    res.cookie('token', token, { httpOnly: true });
+
+      res.redirect('/protected');
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({message: "DB error"});
+    }
+  });
+  
+  app.listen(3000, () => {
+    console.log('Server started on port 3000');
+  });
+
 
 app.post('/logout', (req, res) => {
     res.clearCookie('token');
